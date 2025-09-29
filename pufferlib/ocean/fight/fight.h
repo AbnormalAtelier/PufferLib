@@ -253,8 +253,16 @@ void c_step(Fight *env) {
     }
 
     for (int i = 0; i < 2; i++) {
-        if (env->agents[i].hp <= 0)
+        if (env->agents[i].hp <= 0) {
             env->terminals[i] = 1;
+            env->rewards[1 - i] += 1.0f; // Example win reward
+            env->log.perf += 1.0f;
+            env->log.score += 1.0f;
+            env->log.episode_return += 1.0f;
+            env->log.n++;
+            c_reset(env);
+            break;
+        }
         FighterUpdateAttack(&env->agents[i]);
     }
 

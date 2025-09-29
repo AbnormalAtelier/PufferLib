@@ -35,10 +35,11 @@ class Fight(pufferlib.PufferEnv):
                 self.actions[i * 2 : (i + 1) * 2],
                 self.rewards[i * 2 : (i + 1) * 2],
                 self.terminals[i * 2 : (i + 1) * 2],
+                self.truncations[i * 2 : (i + 1) * 2],
+                seed,
                 width=width,
                 height=height,
-                seed=seed,
-            )
+                )
             c_envs.append(c_env)
 
         self.c_envs = binding.vectorize(*c_envs)
