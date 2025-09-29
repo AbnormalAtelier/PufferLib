@@ -123,6 +123,7 @@ MAKE_FUNCTIONS = {
     'convert': 'Convert',
     'convert_circle': 'ConvertCircle',
     'pong': 'Pong',
+    'flappy': 'Flappy',
     'freeway': 'Freeway',
     'enduro': 'Enduro',
     'tetris': 'Tetris',
