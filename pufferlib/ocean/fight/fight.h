@@ -130,7 +130,8 @@ void c_reset(Fight *env) {
                              .hp = 100,
                              .startup_frame = 10.0f,
                              .active_frame = 1.0f,
-                             .recovery_frame = 8.0f};
+                             .recovery_frame = 8.0f,
+                             .tick_since_rewards = 0};
     env->agents[1] = (Agent){.pos = {env->width * 0.75f - 20, groundY - 80},
                              .vel = {0, 0},
                              .w = 80,
@@ -140,10 +141,8 @@ void c_reset(Fight *env) {
                              .hp = 100,
                              .startup_frame = 10.0f,
                              .active_frame = 1.0f,
-                             .recovery_frame = 8.0f};
-    env->rewards[0] = env->rewards[1] = 0;
-    env->terminals[0] = env->terminals[1] = 0;
-    env->log = (Log){0};
+                             .recovery_frame = 8.0f,
+                             .tick_since_rewards = 0};
     compute_observations(env);
 }
 
@@ -159,7 +158,7 @@ void c_step(Fight *env) {
     const float kbY = -220.0f;
     float dt = 1.0f / 60.0f;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) { // moving
         env->rewards[i] = 0;
         Agent *f = &env->agents[i];
         f->tick_since_rewards += 1;
@@ -238,16 +237,9 @@ void c_step(Fight *env) {
             Rectangle hb = AttackHitbox(attacker);
             if (CheckCollisionRecs(hb, FighterHitbox(defender))) {
                 defender->hp -= dmg;
-                if (defender->hp < 0)
+                if (defender->hp < 0) {
                     defender->hp = 0;
-                defender->vel.x = attacker->facing * kbX;
-                defender->vel.y = kbY;
-                attacker->hitRegistered = true;
-                env->rewards[i] += 1.0f;
-                env->log.perf += 1.0f;
-                env->log.score += 1.0f;
-                env->log.episode_return += 1.0f;
-                env->log.n++;
+                }
             }
         }
     }
@@ -261,7 +253,7 @@ void c_step(Fight *env) {
             env->log.episode_return += 1.0f;
             env->log.n++;
             c_reset(env);
-            break;
+            return;
         }
         FighterUpdateAttack(&env->agents[i]);
     }
