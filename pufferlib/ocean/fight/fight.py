@@ -18,10 +18,10 @@ class Fight(pufferlib.PufferEnv):
     ):
         # Only 2 fighters, 8 obs per fighter (see fight.c/fight.h)
         self.single_observation_space = gymnasium.spaces.Box(
-            low=0, high=1, shape=(22,), dtype=np.float32
+            low=0, high=1, shape=(12,), dtype=np.float32
         )
         # 3 actions per fighter: move, attack, jump (see fight.c)
-        self.single_action_space = gymnasium.spaces.MultiDiscrete([3, 2, 2])
+        self.single_action_space = gymnasium.spaces.MultiDiscrete([5, 5])
 
         self.render_mode = render_mode
         self.num_agents = num_envs * 2

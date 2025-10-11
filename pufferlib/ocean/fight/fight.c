@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 int main() {
-    int num_obs = 22; // hard coded because only 2 fighters, 8 per fighter
+    int num_obs = 12; // hard coded
     Weights *weights =
         load_weights("resources/fight/fight_weights.bin", 137743);
-    int logit_sizes[3] = {3, 2, 2};
+    int logit_sizes[2] = {5, 5};
     LinearLSTM *net = make_linearlstm(weights, 2, num_obs, logit_sizes, 2);
 
     Fight env = {
@@ -15,7 +15,7 @@ int main() {
     };
     init(&env);
 
-    env.observations = calloc(22, sizeof(float));
+    env.observations = calloc(12, sizeof(float));
     env.actions =
         calloc(6, sizeof(int)); // 3 actions per fighter, move, attack, jump
     env.rewards = calloc(2, sizeof(float));
