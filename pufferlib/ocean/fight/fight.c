@@ -3,21 +3,20 @@
 #include <stdlib.h>
 
 int main() {
-    int num_obs = 16; // hard coded because only 2 fighters, 8 per fighter
+    int num_obs = 18; // hard coded
     Weights *weights =
         load_weights("resources/fight/fight_weights.bin", 137743);
-    int logit_sizes[3] = {2, 2, 2};
+    int logit_sizes[1] = {8};
     LinearLSTM *net = make_linearlstm(weights, 2, num_obs, logit_sizes, 2);
 
     Fight env = {
-        .width = 960,
-        .height = 670,
+        .screen_width = 960,
+        .screen_height = 670,
     };
     init(&env);
 
-    env.observations = calloc(16, sizeof(float));
-    env.actions =
-        calloc(6, sizeof(int)); // 3 actions per fighter, move, attack, jump
+    env.observations = calloc(12, sizeof(float));
+    env.actions = calloc(8, sizeof(int));
     env.rewards = calloc(2, sizeof(float));
     env.terminals = calloc(2, sizeof(unsigned char));
 
@@ -26,9 +25,7 @@ int main() {
 
     while (!WindowShouldClose()) {
         for (int i = 0; i < 2; i++) {
-            env.actions[3 * i] = rand() % 2;
-            env.actions[3 * i + 1] = rand() % 2;
-            env.actions[3 * i + 2] = rand() % 2;
+            env.actions[i] = rand() % 9;
         }
 
         forward_linearlstm(net, env.observations, env.actions);

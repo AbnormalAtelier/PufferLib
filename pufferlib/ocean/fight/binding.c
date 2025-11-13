@@ -1,11 +1,10 @@
 #include "fight.h"
-
 #define Env Fight
 #include "../env_binding.h"
 
 static int my_init(Env *env, PyObject *args, PyObject *kwargs) {
-    env->width = unpack(kwargs, "width");
-    env->height = unpack(kwargs, "height");
+    env->screen_width = unpack(kwargs, "width");
+    env->screen_height = unpack(kwargs, "height");
     init(env);
     return 0;
 }
